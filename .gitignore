@@ -161,3 +161,6 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+blodb.sqlite
+.idea/
+tests/
