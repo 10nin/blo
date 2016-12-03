@@ -19,7 +19,7 @@ class BloArticle:
         """
         if pathlib.Path(file_path).exists():
             with open(file_path) as f:
-                self._raw_text = f.readlines()
+                self._raw_text = "".join(f.readlines())
         else:
             raise FileNotFoundError()
 
