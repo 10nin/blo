@@ -4,9 +4,10 @@
 ### Process outline
 1. Read markdown file
 2. Convert to html
-3. Write database and convert to "wakachi-gaki" style in main body section.
+3. Write to database and convert from that main section to "wakachi-gaki" style format.
 ### About Wakachi-gaki
 "wakachi-gaki" is simple way for full text search in Japanese text.
+It split word by spaces.
 
 ex)
 `私はプログラミングが好きです ==> 私 は プログラミング が 好きです`
@@ -14,8 +15,8 @@ ex)
 ## Command Line and how to use
 `$ blo [file.md]`
 1. set blo to git hook (git push hook).
-2. write your article on markdown format.
-3. git commit and git push of your article.
+2. write my article on markdown format.
+3. git commit and git push of my article.
 4. git hook execute blo, it convert to article to database information.
 
 ## Table structure
