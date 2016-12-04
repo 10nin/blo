@@ -25,4 +25,11 @@ class TestBloArticle(unittest.TestCase):
         pass
 
     def test_get_digest(self):
-        pass
+        expected_html = '<h1>Test Article</h1>\n<p>first paragraph</p>\n<p>second paragraph with semi long length string and the quick brown fox jumps over the lazy dog repeat the quick brown fox jumps over the lazy dog repeat the quick brown fox jumps over the lazy dog.</p>\n<p>third paragraph with bullet list</p>\n<ul>\n<li>1st\n<ul>\n<li>1st c1</li>\n<li>1st c2</li>\n</ul>\n</li>\n<li>2nd</li>\n<li>3rd\n<ul>\n<li>3rd c1</li>\n<li>3rd c2</li>\n</ul>\n</li>\n<li>4th</li>\n</ul>\n<p><strong>Strong text</strong> <em>Italic text</em></p>\n'
+        self.blo_article.load_from_file(self.base_file_path)
+        self.blo_article.convert_to_html()
+        from hashlib import sha512
+        hs = sha512()
+        hs.update(expected_html.encode('utf-8'))
+        self.assertEqual(hs.digest(), self.blo_article.get_digest())
+
