@@ -33,3 +33,10 @@ class TestBloArticle(unittest.TestCase):
         hs.update(expected_html.encode('utf-8'))
         self.assertEqual(hs.digest(), self.blo_article.get_digest())
 
+    def test_get_raw_text_body(self):
+        pass
+        # TODO: Implement test pattern for wakachigaki-text
+        #self.blo_article.load_from_file(self.base_file_path)
+        #ast = self.blo_article.get_raw_text_body()
+
+

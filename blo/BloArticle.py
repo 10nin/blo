@@ -37,6 +37,15 @@ class BloArticle:
 
         return self._html_text
 
+    def get_raw_text_body(self):
+        """Get text data from raw markdown text without any markup.
+
+        :return: text data without any markup
+        """
+        parser = CommonMark.Parser()
+        ast = parser.parse(self._raw_text)
+        return ast
+
     def get_digest(self):
         self.hs.update(self._html_text.encode('utf-8'))
         return  self.hs.digest()
