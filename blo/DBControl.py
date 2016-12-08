@@ -2,7 +2,7 @@ import sqlite3
 
 
 class DBControl:
-    def __init__(self, db_name=":memory:"):
+    def __init__(self, db_name : str=":memory:"):
         self.db_conn = sqlite3.connect(db_name)
 
     def create_tables(self):
@@ -19,7 +19,7 @@ class DBControl:
         self.db_conn.close()
         self.db_conn = None
 
-    def _select_all(self, table_name):
+    def _select_all(self, table_name : str) -> list:
         c = self.db_conn.cursor()
         c.execute("SELECT * FROM " + table_name)
         return c.fetchall()
