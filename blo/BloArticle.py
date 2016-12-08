@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import re
 import pathlib
 import CommonMark
 from hashlib import sha512
@@ -42,9 +43,12 @@ class BloArticle:
 
         :return: text data without any markup
         """
-        parser = CommonMark.Parser()
-        ast = parser.parse(self._raw_text)
-        return ast
+        if self._html_text == '':
+            self.convert_to_html()
+
+        # remove html tags
+        return re.sub(r'\n+', '\n', re.sub(r'<.+?>', "", self._html_text))
+
 
     def get_digest(self):
         self.hs.update(self._html_text.encode('utf-8'))

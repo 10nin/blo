@@ -98,10 +98,8 @@ class TestBloArticle(unittest.TestCase):
         hs.update(expected_html.encode('utf-8'))
         self.assertEqual(hs.digest(), self.blo_article.get_digest())
 
-    def test_get_raw_text_body(self):
-        pass
-        # TODO: Implement test pattern for wakachigaki-text
-        #self.blo_article.load_from_file(self.base_file_path)
-        #ast = self.blo_article.get_raw_text_body()
-
-
+    def test_get_raw_text_body_2(self):
+        expected_txt = "日本語を含んだテストパターンファイル\n天文と俳句（現代仮名遣い風に編集）\n寺田寅彦\n俳句季題の分類は普通に 時候 、''天文'''、 地理 、人事、動物、植物という風になっている。\nこれらのうちで後の三つは別として、初めの三つの項目中における各季題の分け方は現代の科学知識から見ると、\n決して合理的であるとは思われない。\n天文と俳句（原文をそのまま青空文庫より引用）\n寺田寅彦\n俳句季題の分類は普通に時候、天文、地理、人事、動物、植物といふ風になつて居る。此等のうちで後の三つは別として、初めの三つの項目中に於ける各季題の分け方は現代の科學知識から見ると、決して合理的であるとは思はれない。\nいくつかの記述要素\nリストを記述する\nリスト項目1\n子リスト項目1\n子リスト項目2\nwith english text\nin itarlic\n日本語の表記と英語( English )の表記を併記した状態でテストを行うためのデータ\n"
+        self.blo_article.load_from_file(self.base_file_path_2)
+        base_txt = self.blo_article.get_raw_text_body()
+        self.assertEqual(expected_txt, base_txt)
