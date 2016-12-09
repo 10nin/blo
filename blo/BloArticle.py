@@ -14,7 +14,7 @@ class BloArticle:
         self._html_text = ''
         self.hs = sha512()
 
-    def load_from_file(self, file_path : str):
+    def load_from_file(self, file_path: str):
         """ The main markdown contents oad from file.
 
         :param file_path: path to target markdown file. if file_path is not exists then raise FileNotFoundError.
@@ -25,7 +25,7 @@ class BloArticle:
         else:
             raise FileNotFoundError()
 
-    def convert_to_html(self, template_name : str="") -> str:
+    def convert_to_html(self, template_name: str="") -> str:
         """ Convert from raw markdown text to html.
 
         :param template_name: Jinja template file name (find on templates directory), default is empty
