@@ -1,5 +1,5 @@
 import sqlite3
-
+from .BloArticle import BloArticle
 
 class DBControl:
     def __init__(self, db_name : str=":memory:"):
@@ -18,6 +18,15 @@ class DBControl:
     def close_connect(self):
         self.db_conn.close()
         self.db_conn = None
+
+    def insert_article(self, article: BloArticle):
+        assert(article is not None)
+        # if has not text data then no action on this method.
+        if article.has_text :
+            c = self.db_conn.cursor()
+            # TODO: Implement insert query for Article and Article_fts
+            c.execute("")
+            self.db_conn.commit()
 
     def _select_all(self, table_name : str) -> list:
         c = self.db_conn.cursor()
