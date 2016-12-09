@@ -9,9 +9,13 @@ from hashlib import sha512
 class BloArticle:
     """Article of Blo. written markdown style.
     """
-    def __init__(self):
-        self._raw_text = ''
-        self._html_text = ''
+    def __init__(self, template_name: str= ""):
+        """ BloArticle class initializer.
+
+        :param template_name: Jinja template file name (find on templates directory), default is empty"""
+        self._raw_text = ""
+        self._html_text = ""
+        self._template_name = ""
         self.hs = sha512()
         self.has_text = False
 
@@ -27,19 +31,24 @@ class BloArticle:
         else:
             raise FileNotFoundError()
 
-    def convert_to_html(self, template_name: str="") -> str:
+    def get_html(self) -> str:
+        if self._html_text == "":
+            self._html_text = self._convert_to_html()
+        return self._html_text
+
+    def _convert_to_html(self) -> str:
         """ Convert from raw markdown text to html.
 
-        :param template_name: Jinja template file name (find on templates directory), default is empty
         :return: html formatted text
         """
-        if template_name == "":
-            self._html_text = CommonMark.commonmark(self._raw_text)
+        html = ""
+        if self._template_name == "":
+            html = CommonMark.commonmark(self._raw_text)
         else:
             # TODO: implement generate from markdown to jinja template applied html text
             pass
 
-        return self._html_text
+        return html
 
     def _get_raw_text_body(self) -> str:
         """Get text data from raw markdown text without any markup.
@@ -47,7 +56,7 @@ class BloArticle:
         :return: text data without any markup
         """
         if self._html_text == '':
-            self.convert_to_html()
+            self._convert_to_html()
 
         # remove html tags
         return re.sub(r'\n+', '\n', re.sub(r'<.+?>', "", self._html_text))

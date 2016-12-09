@@ -20,7 +20,7 @@ class TestBloArticle(unittest.TestCase):
     def test_convert_to_simple_html_1(self):
         expected_html = '<h1>Test Article</h1>\n<p>first paragraph</p>\n<p>second paragraph with semi long length string and the quick brown fox jumps over the lazy dog repeat the quick brown fox jumps over the lazy dog repeat the quick brown fox jumps over the lazy dog.</p>\n<p>third paragraph with bullet list</p>\n<ul>\n<li>1st\n<ul>\n<li>1st c1</li>\n<li>1st c2</li>\n</ul>\n</li>\n<li>2nd</li>\n<li>3rd\n<ul>\n<li>3rd c1</li>\n<li>3rd c2</li>\n</ul>\n</li>\n<li>4th</li>\n</ul>\n<p><strong>Strong text</strong> <em>Italic text</em></p>\n'
         self.blo_article.load_from_file(self.base_file_path_1)
-        self.assertMultiLineEqual(expected_html, self.blo_article.convert_to_html())
+        self.assertMultiLineEqual(expected_html, self.blo_article._convert_to_html())
 
     def test_convert_to_simple_html_2(self):
         expected_html = """<h1>日本語を含んだテストパターンファイル</h1>
@@ -50,7 +50,7 @@ class TestBloArticle(unittest.TestCase):
 </ul>
 """
         self.blo_article.load_from_file(self.base_file_path_2)
-        self.assertMultiLineEqual(expected_html, self.blo_article.convert_to_html())
+        self.assertMultiLineEqual(expected_html, self.blo_article._convert_to_html())
 
     def test_convert_to_template_html(self):
         pass
@@ -58,7 +58,7 @@ class TestBloArticle(unittest.TestCase):
     def test_get_digest_1(self):
         expected_html = '<h1>Test Article</h1>\n<p>first paragraph</p>\n<p>second paragraph with semi long length string and the quick brown fox jumps over the lazy dog repeat the quick brown fox jumps over the lazy dog repeat the quick brown fox jumps over the lazy dog.</p>\n<p>third paragraph with bullet list</p>\n<ul>\n<li>1st\n<ul>\n<li>1st c1</li>\n<li>1st c2</li>\n</ul>\n</li>\n<li>2nd</li>\n<li>3rd\n<ul>\n<li>3rd c1</li>\n<li>3rd c2</li>\n</ul>\n</li>\n<li>4th</li>\n</ul>\n<p><strong>Strong text</strong> <em>Italic text</em></p>\n'
         self.blo_article.load_from_file(self.base_file_path_1)
-        self.blo_article.convert_to_html()
+        self.blo_article._convert_to_html()
         from hashlib import sha512
         hs = sha512()
         hs.update(expected_html.encode('utf-8'))
@@ -92,7 +92,7 @@ class TestBloArticle(unittest.TestCase):
 </ul>
 """
         self.blo_article.load_from_file(self.base_file_path_2)
-        self.blo_article.convert_to_html()
+        self.blo_article._convert_to_html()
         from hashlib import sha512
         hs = sha512()
         hs.update(expected_html.encode('utf-8'))
