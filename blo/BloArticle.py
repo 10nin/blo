@@ -13,6 +13,7 @@ class BloArticle:
         self._raw_text = ''
         self._html_text = ''
         self.hs = sha512()
+        self.has_text = False
 
     def load_from_file(self, file_path: str):
         """ The main markdown contents oad from file.
@@ -22,6 +23,7 @@ class BloArticle:
         if pathlib.Path(file_path).exists():
             with open(file_path) as f:
                 self._raw_text = "".join(f.readlines())
+            self.has_text = True
         else:
             raise FileNotFoundError()
 
