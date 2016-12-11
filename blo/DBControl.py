@@ -18,8 +18,8 @@ class DBControl:
                                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                                     text TEXT,
                                     digest TEXT UNIQUE,
-                                    updatedate TEXT)""")
-        c.execute("CREATE VIRTUAL TABLE Articles_fts USING fts4( words TEXT )")
+                                    updatedate TEXT);""")
+        c.execute("CREATE VIRTUAL TABLE Articles_fts USING fts4( words TEXT );")
         self.db_conn.commit()
 
     def close_connect(self):
@@ -43,9 +43,15 @@ class DBControl:
             timestamp = self._get_timestamp()
             wakati = article.get_wakati_txt()
 
-            c.execute("INSERT INTO Article (text, digest, updatedate) VALUES (?, ?, ?)", (html, digest, timestamp))
-            c.execute("INSERT INTO Article_fts (words) VALUES (?)", (wakati,))
+            c.execute("INSERT INTO Article (text, digest, updatedate) VALUES (?, ?, ?);", (html, digest, timestamp))
+            c.execute("INSERT INTO Article_fts (words) VALUES (?);", (wakati,))
             self.db_conn.commit()
+
+    def select_last_n(self, n) -> list:
+        assert(self.db_conn is not None)
+        c = self.db_conn.cursor()
+        c.execute("SELECT * FROM Article LIMIT ? ORDER BY updatedate DESC;", (n,))
+        return c.fetchall()
 
     @staticmethod
     def _get_timestamp() -> str:
