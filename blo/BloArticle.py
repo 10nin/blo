@@ -46,8 +46,10 @@ class BloArticle:
         if self._template_name == "":
             html = CommonMark.commonmark(self._raw_text)
         else:
-            # TODO: implement generate from markdown to jinja template applied html text
-            pass
+            template = self._get_template()
+            # TODO: implement convert method markdown to html via jinja2 template
+            # html_parts = list()
+            # html = template.render(title=html_parts['title'], bdoy=html_parts['body'])
 
         return html
 
@@ -70,4 +72,9 @@ class BloArticle:
         mcb = MeCab.Tagger("-Owakati")
         wakachi_txt = mcb.parse(self._get_raw_text_body())
         return wakachi_txt
+
+    def _get_template(self):
+        ld = jinja2.FileSystemLoader('template')
+        e = jinja2.Environment(loader=ld, trim_blocks=True, lstrip_blocks=True)
+        return e.get_template(self._template_name)
 
