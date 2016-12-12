@@ -10,7 +10,6 @@ class TestDBControlOnMemory(unittest.TestCase):
 
     def test_initializer_for_file(self):
         file_path = "./test.sqlite"
-        self.db_control.close_connect()
         self.db_control = DBControl(file_path)
         self.db_control.create_tables()
         self.assertTrue(Path(file_path).exists())
@@ -45,5 +44,5 @@ class TestDBControlOnMemory(unittest.TestCase):
         ret = self.db_control.select_last_n(5)
         self.assertEqual(2, len(ret))
 
-    def doCleanups(self):
+    def tearDown(self):
         self.db_control.close_connect()
