@@ -3,6 +3,7 @@ import re
 import pathlib
 import CommonMark
 import MeCab
+import jinja2
 from hashlib import sha512
 
 
