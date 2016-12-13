@@ -47,11 +47,18 @@ class BloArticle:
             html = CommonMark.commonmark(self._raw_text)
         else:
             template = self._get_template()
-            # TODO: implement convert method markdown to html via jinja2 template
-            # html_parts = list()
-            # html = template.render(title=html_parts['title'], bdoy=html_parts['body'])
+            html_parts = self._get_html_parts()
+            html = template.render(title=html_parts['title'], bdoy=html_parts['body'])
 
         return html
+
+    def _get_html_parts(self):
+        ret = dict()
+        # TODO: implement get html parts dictionary from MarkDown document.
+        # TODO: it dictionary need 'title' key and 'body' key.
+        ret['title'] = self._html_text
+        ret['body'] = self._html_text
+        return ret
 
     def _get_raw_text_body(self) -> str:
         """Get text data from raw markdown text without any markup.
