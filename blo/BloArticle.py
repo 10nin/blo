@@ -54,10 +54,15 @@ class BloArticle:
 
     def _get_html_parts(self):
         ret = dict()
-        # TODO: implement get html parts dictionary from MarkDown document.
-        # TODO: it dictionary need 'title' key and 'body' key.
-        ret['title'] = self._html_text
-        ret['body'] = self._html_text
+        for l in self._raw_text:
+            # First H1 size text set to page title
+            if re.match(r'# .+$', l):
+                ret['title'] = l.replace('#','').strip()
+                break
+
+        # self html text set to body html
+        ret['body'] = self.get_html()
+
         return ret
 
     def _get_raw_text_body(self) -> str:
