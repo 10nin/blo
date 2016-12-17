@@ -86,7 +86,7 @@ class BloArticle:
         return wakachi_txt
 
     def _get_template(self):
-        ld = jinja2.FileSystemLoader('template')
+        ld = jinja2.FileSystemLoader(self._template_name)
         e = jinja2.Environment(loader=ld, trim_blocks=True, lstrip_blocks=True)
         return e.get_template(self._template_name)
 
