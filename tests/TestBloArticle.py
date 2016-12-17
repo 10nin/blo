@@ -4,7 +4,7 @@ from blo.BloArticle import BloArticle
 
 class TestBloArticle(unittest.TestCase):
     def setUp(self):
-        self.blo_article = BloArticle()
+        self.blo_article = BloArticle('./templates')
         self.base_file_path_1 = "./test_article_1.md"
         self.base_file_path_2 = "./test_article_2.md"
 
@@ -58,11 +58,11 @@ class TestBloArticle(unittest.TestCase):
     def test_get_digest_1(self):
         expected_html = '<h1>Test Article</h1>\n<p>first paragraph</p>\n<p>second paragraph with semi long length string and the quick brown fox jumps over the lazy dog repeat the quick brown fox jumps over the lazy dog repeat the quick brown fox jumps over the lazy dog.</p>\n<p>third paragraph with bullet list</p>\n<ul>\n<li>1st\n<ul>\n<li>1st c1</li>\n<li>1st c2</li>\n</ul>\n</li>\n<li>2nd</li>\n<li>3rd\n<ul>\n<li>3rd c1</li>\n<li>3rd c2</li>\n</ul>\n</li>\n<li>4th</li>\n</ul>\n<p><strong>Strong text</strong> <em>Italic text</em></p>\n'
         self.blo_article.load_from_file(self.base_file_path_1)
-        self.blo_article._convert_to_html()
+        self.blo_article.get_html()
         from hashlib import sha512
         hs = sha512()
         hs.update(expected_html.encode('utf-8'))
-        self.assertEqual(hs.digest(), self.blo_article.get_digest())
+        self.assertEqual(hs.hexdigest(), self.blo_article.get_digest())
 
     def test_get_digest_2(self):
         expected_html = """<h1>日本語を含んだテストパターンファイル</h1>
@@ -92,14 +92,14 @@ class TestBloArticle(unittest.TestCase):
 </ul>
 """
         self.blo_article.load_from_file(self.base_file_path_2)
-        self.blo_article._convert_to_html()
+        self.blo_article.get_html()
         from hashlib import sha512
         hs = sha512()
         hs.update(expected_html.encode('utf-8'))
-        self.assertEqual(hs.digest(), self.blo_article.get_digest())
+        self.assertEqual(hs.hexdigest(), self.blo_article.get_digest())
 
     def test_get_raw_text_body_2(self):
-        expected_txt = "日本語を含んだテストパターンファイル\n天文と俳句（現代仮名遣い風に編集）\n寺田寅彦\n俳句季題の分類は普通に 時候 、''天文'''、 地理 、人事、動物、植物という風になっている。\nこれらのうちで後の三つは別として、初めの三つの項目中における各季題の分け方は現代の科学知識から見ると、\n決して合理的であるとは思われない。\n天文と俳句（原文をそのまま青空文庫より引用）\n寺田寅彦\n俳句季題の分類は普通に時候、天文、地理、人事、動物、植物といふ風になつて居る。此等のうちで後の三つは別として、初めの三つの項目中に於ける各季題の分け方は現代の科學知識から見ると、決して合理的であるとは思はれない。\nいくつかの記述要素\nリストを記述する\nリスト項目1\n子リスト項目1\n子リスト項目2\nwith english text\nin itarlic\n日本語の表記と英語( English )の表記を併記した状態でテストを行うためのデータ\n"
+        expected_txt = """日本語を含んだテストパターンファイル\n天文と俳句（現代仮名遣い風に編集）\n寺田寅彦\n俳句季題の分類は普通に 時候 、''天文'''、 地理 、人事、動物、植物という風になっている。\nこれらのうちで後の三つは別として、初めの三つの項目中における各季題の分け方は現代の科学知識から見ると、\n決して合理的であるとは思われない。\n天文と俳句（原文をそのまま青空文庫より引用）\n寺田寅彦\n俳句季題の分類は普通に時候、天文、地理、人事、動物、植物といふ風になつて居る。此等のうちで後の三つは別として、初めの三つの項目中に於ける各季題の分け方は現代の科學知識から見ると、決して合理的であるとは思はれない。\nいくつかの記述要素\nリストを記述する\nリスト項目1\n子リスト項目1\n子リスト項目2\nwith english text\nin itarlic\n日本語の表記と英語( English )の表記を併記した状態でテストを行うためのデータ\n"""
         self.blo_article.load_from_file(self.base_file_path_2)
         base_txt = self.blo_article._get_raw_text_body()
         self.assertEqual(expected_txt, base_txt)
@@ -110,3 +110,39 @@ class TestBloArticle(unittest.TestCase):
         self.blo_article._get_raw_text_body()
         wakati_txt = self.blo_article.get_wakati_txt()
         self.assertEqual(expected_txt, wakati_txt)
+
+    def test_template(self):
+        expected_txt = '''<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Article</title>
+</head>
+<body>
+<h1>Test Article</h1>
+<p>first paragraph</p>
+<p>second paragraph with semi long length string and the quick brown fox jumps over the lazy dog repeat the quick brown fox jumps over the lazy dog repeat the quick brown fox jumps over the lazy dog.</p>
+<p>third paragraph with bullet list</p>
+<ul>
+<li>1st
+<ul>
+<li>1st c1</li>
+<li>1st c2</li>
+</ul>
+</li>
+<li>2nd</li>
+<li>3rd
+<ul>
+<li>3rd c1</li>
+<li>3rd c2</li>
+</ul>
+</li>
+<li>4th</li>
+</ul>
+<p><strong>Strong text</strong> <em>Italic text</em></p>
+
+</body>
+</html>'''
+        self.blo_article.load_from_file(self.base_file_path_1)
+        html_txt = self.blo_article.get_html('test_success.html')
+        self.assertEqual(expected_txt, html_txt)

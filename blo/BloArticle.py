@@ -10,13 +10,13 @@ from hashlib import sha512
 class BloArticle:
     """Article of Blo. written markdown style.
     """
-    def __init__(self, template_name: str= ""):
+    def __init__(self, template_directory:str='templates'):
         """ BloArticle class initializer.
 
-        :param template_name: Jinja template file name (find on templates directory), default is empty"""
+        :param template_directory: Jinja template directory, default is 'templates'"""
         self._raw_text = ""
         self._html_text = ""
-        self._template_name = ""
+        self._template_directory = template_directory
         self.hs = sha512()
         self.has_text = False
 
@@ -32,36 +32,38 @@ class BloArticle:
         else:
             raise FileNotFoundError()
 
-    def get_html(self) -> str:
+    def get_html(self, template_name:str='') -> str:
         if self._html_text == "":
-            self._html_text = self._convert_to_html()
+            self._html_text = self._convert_to_html(template_name)
         return self._html_text
 
-    def _convert_to_html(self) -> str:
+    def _convert_to_html(self, template_name:str='') -> str:
         """ Convert from raw markdown text to html.
 
         :return: html formatted text
         """
         html = ""
-        if self._template_name == "":
+        if template_name == "":
             html = CommonMark.commonmark(self._raw_text)
         else:
-            template = self._get_template()
+            template = self._get_template(template_name)
             html_parts = self._get_html_parts()
-            html = template.render(title=html_parts['title'], bdoy=html_parts['body'])
+            html = template.render(html_parts=html_parts)
 
         return html
 
     def _get_html_parts(self):
-        ret = dict()
-        for l in self._raw_text:
+
+        # initialize html parts dictionary
+        ret = {'title':'', 'body':''}
+        for l in self._raw_text.split('\n'):
             # First H1 size text set to page title
             if re.match(r'# .+$', l):
                 ret['title'] = l.replace('#','').strip()
                 break
 
         # self html text set to body html
-        ret['body'] = self.get_html()
+        ret['body'] = CommonMark.commonmark(self._raw_text)
 
         return ret
 
@@ -71,22 +73,22 @@ class BloArticle:
         :return: text data without any markup
         """
         if self._html_text == '':
-            self._convert_to_html()
+            self.get_html()
 
         # remove html tags
         return re.sub(r'\n+', '\n', re.sub(r'<.+?>', "", self._html_text))
 
     def get_digest(self) -> str:
         self.hs.update(self._html_text.encode('utf-8'))
-        return self.hs.digest()
+        return self.hs.hexdigest()
 
     def get_wakati_txt(self) -> str:
         mcb = MeCab.Tagger("-Owakati")
         wakachi_txt = mcb.parse(self._get_raw_text_body())
         return wakachi_txt
 
-    def _get_template(self):
-        ld = jinja2.FileSystemLoader(self._template_name)
+    def _get_template(self, template_name:str):
+        ld = jinja2.FileSystemLoader(self._template_directory)
         e = jinja2.Environment(loader=ld, trim_blocks=True, lstrip_blocks=True)
-        return e.get_template(self._template_name)
+        return e.get_template(template_name)
 
