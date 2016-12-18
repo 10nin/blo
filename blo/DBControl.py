@@ -2,6 +2,7 @@ import sqlite3
 from datetime import datetime
 from .BloArticle import BloArticle
 
+
 class DBControl:
     def __init__(self, db_name: str=":memory:"):
         """Initializer for blo blog engine database controller.
