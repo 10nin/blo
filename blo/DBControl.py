@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import sqlite3
 from datetime import datetime
-from .BloArticle import BloArticle
+from blo.BloArticle import BloArticle
 
 
 class DBControl:
