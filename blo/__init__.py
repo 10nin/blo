@@ -1,12 +1,16 @@
+import configparser
 from blo.BloArticle import BloArticle
 from blo.DBControl import DBControl
 
 
 class Blo:
-    def __init__(self, db_file_path, template_dir=""):
-        self.template_dir = template_dir
+    def __init__(self, config_file_path):
+        config = configparser.ConfigParser()
+        config.read(config_file_path)
+        self.template_dir = config['TEMPLATE']['TEMPLATE_DIR']
+        self.db_file_path = config['DB']['DB_PATH']
+
         # create tables
-        self.db_file_path = db_file_path
         self.db_control = DBControl(self.db_file_path)
         self.db_control.create_tables()
         self.db_control.close_connect()
