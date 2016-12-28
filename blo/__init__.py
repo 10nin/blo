@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import configparser
 import optparse
 from .BloArticle import BloArticle
@@ -5,7 +6,7 @@ from .BloArticle import BloArticle
 
 class Blo:
     def __init__(self):
-        pass
+        self.article = BloArticle()
 
 if __name__ == '__main__':
     parser = optparse.OptionParser("usage: %prog [option] markdown_file.md")

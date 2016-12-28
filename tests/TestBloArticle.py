@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import unittest
 from blo.BloArticle import BloArticle
 
