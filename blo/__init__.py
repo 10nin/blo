@@ -1,3 +1,5 @@
+import configparser
+import optparse
 from .BloArticle import BloArticle
 
 
@@ -6,6 +8,13 @@ class Blo:
         pass
 
 if __name__ == '__main__':
+    parser = optparse.OptionParser("usage: %prog [option] markdown_file.md")
+    parser.add_option("-c", "--config", dest="config_file",
+                      default="./blo.cfg", type="string", help="specify configuration file path to run on")
+    (options, args) = parser.parse_args()
+    if len(args) != 1:
+        parser.error("incorrect number of arguments")
+    cfg_file = options.config_file
     # TODO: implement main routine of Blo.
     # blo [-c config_file] markdown_file.md
     # -- if no -c option then load config file from default path (current directory).
