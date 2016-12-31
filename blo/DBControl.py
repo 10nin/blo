@@ -30,17 +30,18 @@ class DBControl:
         self.db_conn.close()
         self.db_conn = None
 
-    def insert_article(self, article: BloArticle):
+    def insert_article(self, article: BloArticle, template_name: str=''):
         """Insert article html and wakati text to Article/Article_fts tables.
 
         :param article: target article
+        :param template_name: template file name on template directory.
         """
         assert(article is not None)
         # if has not text data then no action on this method.
         if article.has_text:
             c = self.db_conn.cursor()
 
-            html = article.get_html()
+            html = article.get_html(template_name)
             digest = article.get_digest()
             timestamp = self._get_timestamp()
             wakati = article.get_wakati_txt()

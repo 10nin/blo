@@ -32,12 +32,12 @@ class BloArticle:
         else:
             raise FileNotFoundError()
 
-    def get_html(self, template_name:str='') -> str:
+    def get_html(self, template_name: str='') -> str:
         if self._html_text == "":
             self._html_text = self._convert_to_html(template_name)
         return self._html_text
 
-    def _convert_to_html(self, template_name:str='') -> str:
+    def _convert_to_html(self, template_name: str='') -> str:
         """ Convert from raw markdown text to html.
 
         :return: html formatted text
@@ -55,11 +55,11 @@ class BloArticle:
     def _get_html_parts(self):
 
         # initialize html parts dictionary
-        ret = {'title':'', 'body':''}
+        ret = {'title': '', 'body': ''}
         for l in self._raw_text.split('\n'):
             # First H1 size text set to page title
             if re.match(r'# .+$', l):
-                ret['title'] = l.replace('#','').strip()
+                ret['title'] = l.replace('#', '').strip()
                 break
 
         # self html text set to body html
