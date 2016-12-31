@@ -21,7 +21,7 @@ class DBControl:
                                     text TEXT,
                                     digest TEXT UNIQUE,
                                     updatedate TEXT);""")
-        c.execute("CREATE VIRTUAL TABLE Articles_fts USING fts4( words TEXT );")
+        c.execute("CREATE VIRTUAL TABLE IF NOT EXISTS Articles_fts USING fts4( words TEXT );")
         self.db_conn.commit()
 
     def close_connect(self):
@@ -29,6 +29,15 @@ class DBControl:
         """
         self.db_conn.close()
         self.db_conn = None
+
+    def is_exists(self, digest: str):
+        c = self.db_conn.cursor()
+        c.execute("SELECT * FROM Articles WHERE digest = ?;", (digest,))
+        ret = c.fetchall()
+        if ret is None:
+            return False
+        else:
+            return True
 
     def insert_article(self, article: BloArticle, template_name: str=''):
         """Insert article html and wakati text to Article/Article_fts tables.
@@ -46,9 +55,10 @@ class DBControl:
             timestamp = self._get_timestamp()
             wakati = article.get_wakati_txt()
 
-            c.execute("INSERT INTO Articles (text, digest, updatedate) VALUES (?, ?, ?);", (html, digest, timestamp))
-            c.execute("INSERT INTO Articles_fts (words) VALUES (?);", (wakati,))
-            self.db_conn.commit()
+            if not self.is_exists(digest):
+                c.execute("INSERT INTO Articles (text, digest, updatedate) VALUES (?, ?, ?);", (html, digest, timestamp))
+                c.execute("INSERT INTO Articles_fts (words) VALUES (?);", (wakati,))
+                self.db_conn.commit()
 
     def select_last_n(self, n) -> list:
         assert(self.db_conn is not None)
